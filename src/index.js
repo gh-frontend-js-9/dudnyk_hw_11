@@ -1,62 +1,25 @@
-async function Send() {
+import './assets/styles/scss.scss';
+import login from './scripts/logIn.js';
 
-  let stat = document.getElementById("one");
-  
-  // let name = document.getElementById("name").value;
-  let email = document.getElementById("email").value;
-  let pass = document.getElementById('password').value;
-
-  let obj = {
-    "email": email,
-    "password": pass
-    // "name": name
+window.onload = () => {
+  console.log(localStorage.token);
+  if (localStorage) {
+    console.log(localStorage.token);
+    SendCurrent();
+  } else {
+    let firstPage = new login(container);
+    firstPage.createPage();
   }
-  console.log(obj)
-
-  let response = await fetch('http://localhost:3000/api/users/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(obj)
-  })
-    .then((response) => {
-      console.log(response.headers);
-      console.log(response);
-    })
-    .then((response) => console.log(response.json()) ); 
-
-  /* fetch('http://localhost:3000/api/users/login', {
-    method: 'POST',
-    headers: {
-      'content-Type': 'application/json'
-    },
-    body: JSON.stringify(obj)
-  });
-
-  console.log(response.status +"--" +response.headers.get('x-auth-token'));*/
 }
 
-let form = document.getElementById("form");
-form.addEventListener("submit", function(event) {
-  event.preventDefault();
-  Send();
-});
-
-class Modal {
-
-}
-
-class Controller {
-  handleEvent(event) {
-    switch (event.currentTarget) {
-      case 'signUp':
-        alert(event.currentTarget)
-        break;
+async function SendCurrent() {
+  let response = await fetch('http://localhost:3000/api/users/current', {
+    headers: {
+      "x-access-token": localStorage.token
     }
+  });
+  if (response.status === 200) {
+    document.body.innerHTML = 'You have entered in your account';
   }
-}
-
-class View {
-
+  console.log(response)
 }
